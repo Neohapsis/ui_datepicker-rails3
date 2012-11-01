@@ -27,7 +27,11 @@ module Formtastic::Inputs
     end
 
     def localized value
-      value.nil? ? nil : I18n.localize(object.send(method))
+      begin
+        value.nil? ? nil : I18n.localize(value)
+      rescue
+        value
+      end
     end
   end
 end
