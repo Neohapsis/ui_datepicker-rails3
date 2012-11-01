@@ -14,7 +14,7 @@ module Formtastic::Inputs
     end
 
     def value
-      input_options[:value] || object.send(method).try(:strftime, format)
+      input_options[:value] || (object.send(method).respond_to?(:strftime) && object.send(method).strftime(format)) || object.send(method)
     end
 
     def css_class
@@ -25,9 +25,9 @@ module Formtastic::Inputs
       new_class = [super[:class], css_class].compact.join(" ")
       super.update(:class => new_class, :value => localized(value))
     end
-    
+
     def localized value
       value.nil? ? nil : I18n.localize(object.send(method))
-    end    
+    end
   end
 end
